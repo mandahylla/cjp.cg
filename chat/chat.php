@@ -1,4 +1,5 @@
 <?php session_start(); ?>
+<?php include_once('../contacts/c_handler.php') ;?>
 
 <?php $user = $_SESSION['user']; ?>
 <!DOCTYPE html>
@@ -17,6 +18,11 @@
   <header>
     <h1>What a Chat Bro !</h1>
   </header>
+  <div class="visiteur">
+    <?php if($user):; ?>
+      Utilisateurs connectés : <?php echo update_connectes(); ?>
+    <?php endif; ?>
+  </div>  
   
   
   <section class="chat">

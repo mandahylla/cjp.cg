@@ -8,12 +8,14 @@
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
   ]);
 
+
   /**
    * On doit analyser la demande faite via l'URL (GET) afin de déterminer si on souhaite récupérer les messages ou en écrire un
    */
   $task = "list";
 
   if(array_key_exists("task", $_GET)){
+
     $task = $_GET['task'];
   }
 
@@ -22,6 +24,12 @@
   }  else if($task == "connect"){
     session_start();  
     getConnect();
+  } else if($task == "chat"){
+    getChat();
+  } else if($task == "contact"){
+    getContact();
+  } else if($task == "menu"){
+    getMenu();
   }  else if($task == "logout"){
     getLogout();
   } else {
@@ -36,8 +44,35 @@
 
     session_destroy();
 
-    header('location: index.php');
+    header('location: ./index.php');
   }    
+
+/**
+  * acceder au service de chat
+  */
+  function getChat(){
+    
+    
+    if(isset($_SESSION['user'])) {
+
+        $_SESSION['user'] = $user;
+
+        //require_once('chat/chat.php'); exit();
+      } else {
+
+        header('location: ./index.php');
+      }   
+    }
+
+/**
+  * acceder au service de chat
+  */
+  function getContact(){
+    
+    
+      header('location: ../contacts/index.php');
+        
+    }
 
   /**
    * Créer une session utilisateur pour le chat
@@ -55,10 +90,10 @@
         $_SESSION['user'] = $user;
         //print_r($user); exit();
 
-        header('location: chat.php'); exit();
+        header('location: menu.php'); exit();
       } else{
 
-        header('location: index.php');
+        header('location: ./index.php');
       }   
     }
   }
@@ -115,6 +150,7 @@
     // 3. On affiche les données sous forme de JSON
     echo json_encode($messages);exit();
   }
+
   /**
    * Si on veut écrire au contraire, il faut analyser les paramètres envoyés en POST et les sauver dans la base de données
    */
@@ -143,6 +179,91 @@
     // 3. Donner un statut de succes ou d'erreur au format JSON
     echo json_encode(["status" => "success"]);
   }
+
+  /**
+   * Si on veut récupérer la liste des administrateurs, il faut envoyer du JSON 
+   */
+  function getAdmins(){
+    global $db;
+
+    // 1. On requête la base de données pour sortir les 20 derniers messages
+    $resultats = $db->query("SELECT id_admin, email, name, categorie, id_departement, id_centre, etat_connexion FROM admin_verity ORDER BY name LIMIT 20");
+    // 2. On traite les résultats
+    $admins = $resultats->fetchAll();
+    // 3. On affiche les données sous forme de JSON
+    echo json_encode($admins);exit();
+  }
+  /**
+   * Fonction qui permet de mettre à jour le compteur de visites
+   **/
+
+  function compter_visite(){
+      // On va utiliser l'objet $pdo pour se connecter, il est créé en dehors de la fonction
+      // donc on doit indiquer global $pdo; au début de la fonction
+      global $pdo;
+       
+      // On prépare les données à insérer
+      $ip   = $_SERVER['REMOTE_ADDR']; // L'adresse IP du visiteur
+      $date = date('Y-m-d');           // La date d'aujourd'hui, sous la forme AAAA-MM-JJ
+       
+      // Mise à jour de la base de données
+      // 1. On initialise la requête préparée
+      $query = $pdo->prepare("
+          INSERT INTO stats_visites (ip , date_visite , pages_vues) VALUES (:ip , :date , 1)
+          ON DUPLICATE KEY UPDATE pages_vues = pages_vues + 1
+      ");
+      // 2. On execute la requête préparée avec nos paramètres
+      $query->execute(array(
+          ':ip'   => $ip,
+          ':date' => $date
+      ));
+  }
+
+
+  function get_nbrVisiteurs(){
+    global $db;
+
+    $visiteur = $db->prepare('SELECT * FROM stats_visites');
+    $visiteur->bindvalue(':visite_online', $id_online, PDO::PARAM_STR);
+    $visiteur->execute();
+    $list_visiteur = $visiteur->fetchAll(PDO::FETCH_ASSOC);
+     
+    foreach($list_visiteur as $all => $each)
+    {
+      echo $each['ip']."<br/>";
+      echo $each['pages_vues']."<br/>";
+     
+    }
+  }
+
+/**
+   * Fonction qui permet de voir les utilisateurs connectés
+ **/
+
+  function update_connectes(){
+    global $db; // Objet PDO de connexion à la base de données
+ 
+    // Préparation paramètres nécessaires à la procédure
+    $ip                  = $_SERVER['REMOTE_ADDR'];
+    $time                = time();
+    $inactive_time_limit = 60*5; # 5 minutes
+    $older_than          = $time - $inactive_time_limit;
+ 
+    // Appel de la procédure stockée
+    $stmt = $db->prepare("CALL update_connectes(:OLDER_THAN, :IP, :TIME, @nb_connectes);");
+    $stmt->execute(array(
+        ':OLDER_THAN'   => $older_than,
+        ':IP'           => $ip,
+        ':TIME'         => $time
+    ));
+ 
+    // Récupération du nombre de visiteurs connectés
+    $result = $db->query("SELECT @nb_connectes");
+    $row =  $result->fetch();
+    $nb_connectes = $row['@nb_connectes'];
+    return $nb_connectes;
+}
+
   /**
    * Voilà c'est tout en gros.
    */

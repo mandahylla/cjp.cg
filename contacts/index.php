@@ -1,3 +1,5 @@
+<?php include_once('c_handler.php') ;?>
+<?php compter_visite();?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -48,7 +50,13 @@
                             </table>
                         </div>
                     </div>
+                    <div class="visiteur">
+                        Utilisateurs connectés : <?php echo update_connectes(); ?>
+                    </div>                    
                 </div>
+                <div class="visiteur">
+                        nombre de visiteur : <?php echo get_nbrVisiteurs(); ?>
+                    </div>
             </div>
         </div>        
         <script src="http://code.jquery.com/jquery-2.1.1.js"></script>      
