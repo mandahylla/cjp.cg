@@ -9,12 +9,12 @@ $info = (Object)[];
 
  	if(empty($DATA_OBJ->email))
  	{
- 		$Error = "please enter a valid email";
+ 		$Error = "Entrer un email valide s'il vous plait !";
  	}
 
  	if(empty($DATA_OBJ->password))
  	{
- 		$Error = "please enter a valid password";
+ 		$Error = "Entrer un mot de passe valide !";
  	}
 
  	
@@ -30,13 +30,13 @@ $info = (Object)[];
 			if($result->password == md5($DATA_OBJ->password))
 			{
 				$_SESSION['userid'] = $result->userid;
-				$info->message = "You're successfully logged in";
+				$info->message = "Vous êtes maintenant connecté !";
 				$info->data_type = "info";
 				echo json_encode($info);
 
 			}else{
 
-				$info->message = "Wrong password";
+				$info->message = "vous avez entre un mauvais mots de passe";
 				$info->data_type = "error";
 				echo json_encode($info);
 			}
@@ -44,7 +44,7 @@ $info = (Object)[];
 		}else
 		{
 
-			$info->message = "Wrong email";
+			$info->message = "Votre email n'est pas correcte";
 			$info->data_type = "error";
 			echo json_encode($info);
 

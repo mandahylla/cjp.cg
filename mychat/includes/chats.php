@@ -31,7 +31,7 @@
   				$mydata = "";
   				if(!$refresh){
 						
-						$mydata = "Now Chatting with:<br>
+						$mydata = "En ligne avec :<br>
 							<div id='active_contact'>
 								<img src='$image'>
 								$row->username
@@ -105,7 +105,7 @@
 		$sql = "select * from messages where (sender = :userid || receiver = :userid) group by msgid order by id desc limit 10";
 		$result2 = $DB->read($sql,$a);
 
-		$mydata = "Previews Chats:<br>";
+		$mydata = "Chats Précedents :<br>";
 
 		if(is_array($result2)){
  

@@ -86,14 +86,14 @@
 	<div id="wrapper">
  
  		<div id="header">
- 			My Chat
- 			<div style="font-size: 20px;font-family: myFont;">Login</div>
+ 			Chat en ligne
+ 			<div style="font-size: 20px;font-family: myFont;">Connexion</div>
  		</div>
  		<div id="error" style="">some text</div>
 		<form id="myform">
  			<input type="text" name="email" placeholder="Email"><br>
-			<input type="password" name="password" placeholder="Password"><br>
- 			<input type="submit" value="Login" id="login_button" ><br>
+			<input type="password" name="password" placeholder="Mot de passe"><br>
+ 			<input type="submit" value="Se connecter" id="login_button" ><br>
 
  			<br>
  			<!-- <a href="signup.php" style="display: block;text-align: center;text-decoration: none">
@@ -118,7 +118,7 @@
 
    		e.preventDefault();
    		login_button.disabled = true;
-   		login_button.value = "Loading...Please wait..";
+   		login_button.value = "Chargement...Patientez..";
 
    		var myform = _("myform");
    		var inputs = myform.getElementsByTagName("INPUT");
@@ -155,7 +155,7 @@
 
    				handle_result(xml.responseText);
    				login_button.disabled = false;
-   				login_button.value = "Login";
+   				login_button.value = "Se connecter";
    			}
    		}
 

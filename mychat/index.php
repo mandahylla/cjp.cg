@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My Chat</title>
+	<title>CJP Chat en ligne</title>
 </head>
 
 <style type="text/css">
@@ -311,8 +311,8 @@
 				<div>
 					<label id="label_chat" for="radio_chat">Chat <img src="ui/icons/chat.png"></label>
 					<label id="label_contacts" for="radio_contacts">Contacts <img src="ui/icons/contacts.png"></label>
-					<label id="label_settings" for="radio_settings">Settings <img src="ui/icons/settings.png"></label>
-					<label id="logout" for="radio_logout">Logout <img src="ui/icons/logout.png"></label>
+					<label id="label_settings" for="radio_settings">Configuration <img src="ui/icons/settings.png"></label>
+					<label id="logout" for="radio_logout">Quitter <img src="ui/icons/logout.png"></label>
 				</div>
 
 			</div>
@@ -323,7 +323,7 @@
 				<div id="loader_holder" class="loader_on"><img style="width:70px;" src="ui/icons/giphy.gif"></div>
 
 				<div id="image_viewer" class="image_off" onclick="close_image(event)"></div>
-				My Chat
+				Chat en ligne
 			</div>
 			
 			<div id="container" style="display: flex;">
